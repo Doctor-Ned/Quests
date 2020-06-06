@@ -441,14 +441,17 @@ public class PlayerListener implements Listener {
             if (quester.getCurrentQuests().isEmpty() == false) {
                 for (Quest quest : quester.getCurrentQuests().keySet()) {
                     if (!quest.getOptions().getAllowCommands()) {
-                        if (!evt.getMessage().startsWith("/quest")) {
-                            evt.getPlayer().sendMessage(ChatColor.RED + Lang.get(evt.getPlayer(), "optCommandsDenied")
-                                    .replace("<quest>", ChatColor.DARK_PURPLE + quest.getName() + ChatColor.RED));
-                            evt.setCancelled(true);
-                            plugin.getLogger().info("Player " + evt.getPlayer().getName() + " tried to use command " 
-                                    + evt.getMessage() + " but was denied because they are currently on quest "
-                                    + quest.getName());
-                            return;
+                        String msg = evt.getMessage();
+                        for(String cmd : plugin.getSettings().getDisallowedCommands()) {
+                            if(cmd.length() <= msg.length() && msg.substring(0, cmd.length()).equalsIgnoreCase(cmd)) {
+                                evt.getPlayer().sendMessage(ChatColor.RED + Lang.get(evt.getPlayer(), "optCommandsDenied")
+                                        .replace("<quest>", ChatColor.DARK_PURPLE + quest.getName() + ChatColor.RED));
+                                evt.setCancelled(true);
+                                plugin.getLogger().info("Player " + evt.getPlayer().getName() + " tried to use command "
+                                        + msg + " but was denied because they are currently on quest "
+                                        + quest.getName());
+                                return;
+                            }
                         }
                     }
                     Stage currentStage = quester.getCurrentStage(quest);

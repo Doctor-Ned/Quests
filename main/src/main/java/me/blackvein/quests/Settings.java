@@ -14,6 +14,8 @@ package me.blackvein.quests;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -25,6 +27,7 @@ public class Settings {
     private int acceptTimeout = 20;
     private boolean allowCommands = true;
     private boolean allowCommandsForNpcQuests = false;
+    private List<String> disallowedCommands = new ArrayList<>();
     private boolean allowPranks = true;
     private boolean askConfirmation = true;
     private boolean genFilesOnJoin = true;
@@ -62,6 +65,12 @@ public class Settings {
     }
     public void setAllowCommandsForNpcQuests(boolean allowCommandsForNpcQuests) {
         this.allowCommandsForNpcQuests = allowCommandsForNpcQuests;
+    }
+    public List<String> getDisallowedCommands() {
+        return disallowedCommands;
+    }
+    public void setDisallowedCommands(List<String> disallowedCommands) {
+        this.disallowedCommands = disallowedCommands;
     }
     public boolean canAllowPranks() {
         return allowPranks;
@@ -159,6 +168,7 @@ public class Settings {
         acceptTimeout = config.getInt("accept-timeout", 20);
         allowCommands = config.getBoolean("allow-command-questing", true);
         allowCommandsForNpcQuests = config.getBoolean("allow-command-quests-with-npcs", false);
+        disallowedCommands = config.getStringList("disallowed-commands");
         allowPranks = config.getBoolean("allow-pranks", true);
         askConfirmation = config.getBoolean("ask-confirmation", true);
         genFilesOnJoin = config.getBoolean("generate-files-on-join", true);
